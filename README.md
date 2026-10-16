@@ -1,5 +1,7 @@
 # PromptDock
 
+> **自动适配大部分主流对话式 AI 应用**，自动查找输入框，一键填入或发送常用提示词。适用场景包括网页端（GPT、Gemini、DeepSeek）、桌面端（Codex、Cherry Studio）及 VS Code 插件（Claude Code）等。具体适配效果取决于目标应用是否向 Windows 暴露可识别的输入框。
+
 面向 Windows 的轻量本地提示词管理器，使用 **Tauri 2 + Vue 3 + TypeScript + Rust** 开发。
 
 保存常用提示词，在置顶面板中点击按钮，即可向所选桌面应用的输入框填入内容或触发发送。提示词库保存在本地，无需模型 API 密钥。
