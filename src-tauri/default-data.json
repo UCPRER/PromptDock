@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "categories": [
+    "默认"
+  ],
+  "settings": {
+    "defaultAction": "send",
+    "sendKey": "enter",
+    "theme": "system",
+    "shortcut": "Ctrl+Alt+Space"
+  },
+  "prompts": [
+    {
+      "id": "starter-test",
+      "title": "test",
+      "content": "test",
+      "category": "默认",
+      "tags": [],
+      "favorite": false,
+      "createdAt": 0,
+      "updatedAt": 0,
+      "lastUsedAt": null,
+      "useCount": 0
+    }
+  ]
+}

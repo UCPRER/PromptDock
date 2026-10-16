@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "settings": {
+    "defaultAction": "send",
+    "sendKey": "enter",
+    "theme": "system",
+    "shortcut": "Ctrl+Alt+Space"
+  },
+  "prompts": [
+    {
+      "id": "review",
+      "title": "代码审查",
+      "content": "请审查相关代码，优先检查实际缺陷、边界情况和回归风险。按严重程度列出问题，并指出对应文件和位置。",
+      "category": "编程",
+      "tags": [
+        "审查",
+        "质量"
+      ],
+      "favorite": true,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "continue",
+      "title": "继续完成任务",
+      "content": "请继续完成剩余工作。遇到常规实现选择请自行判断，完成后说明改动、验证结果和未解决的问题。",
+      "category": "编程",
+      "tags": [
+        "执行"
+      ],
+      "favorite": true,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "plan",
+      "title": "先给实施计划",
+      "content": "请先梳理需求、检查现有实现，给出具体的实施步骤和需要确认的问题。在我确认计划前，暂时不要修改代码。",
+      "category": "编程",
+      "tags": [
+        "规划"
+      ],
+      "favorite": true,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "debug",
+      "title": "分析报错",
+      "content": "请分析这个报错的根本原因，结合相关代码给出最小修复方案，并说明如何验证修复是否有效。",
+      "category": "编程",
+      "tags": [
+        "调试"
+      ],
+      "favorite": true,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "explain",
+      "title": "解释这段代码",
+      "content": "请用中文解释这段代码的作用、执行流程和关键设计。先概述整体逻辑，再解释容易误解的部分。",
+      "category": "编程",
+      "tags": [
+        "理解"
+      ],
+      "favorite": false,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "test",
+      "title": "补充关键测试",
+      "content": "请检查现有测试覆盖，针对重要边界情况和回归风险补充有意义的测试，并运行相关测试验证。",
+      "category": "编程",
+      "tags": [
+        "测试"
+      ],
+      "favorite": false,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "polish",
+      "title": "润色表达",
+      "content": "请润色以下内容，保持原意，使用清晰、自然、简洁的中文。删掉重复表达，并保留必要的事实和细节。",
+      "category": "写作",
+      "tags": [
+        "润色"
+      ],
+      "favorite": false,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "summary",
+      "title": "整理讨论结论",
+      "content": "请整理当前讨论的关键结论、已确定的事项、待解决的问题和下一步行动。保留具体约束，避免重复。",
+      "category": "沟通",
+      "tags": [
+        "总结"
+      ],
+      "favorite": false,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    },
+    {
+      "id": "template",
+      "title": "快速技术调研",
+      "content": "请调研 {{主题}}，使用 {{语言}} 回答。优先查阅一手资料，说明适用场景、关键限制和可执行的建议。",
+      "category": "研究",
+      "tags": [
+        "模板"
+      ],
+      "favorite": false,
+      "createdAt": 1792124828493,
+      "updatedAt": 1792124828493,
+      "lastUsedAt": null,
+      "useCount": 0
+    }
+  ]
+}

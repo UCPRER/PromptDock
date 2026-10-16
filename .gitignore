@@ -1,0 +1,33 @@
+/node_modules/
+/dist/
+/src-tauri/target/
+/src-tauri/gen/schemas/
+**/.test-data/
+
+# Local artifacts, caches and private prompt libraries
+/outputs/
+/work/
+/local-data/
+/data/
+prompts.json
+prompts.backup.json
+prompts.pending.json
+*.exe
+*.dll
+*.pdb
+*.zip
+*.tgz
+*.log
+
+# Local environment and editor files
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+Thumbs.db
+Desktop.ini
+/.vs/
+/.idea/
+*.swp
+*~

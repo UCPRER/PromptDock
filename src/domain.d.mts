@@ -1,0 +1,13 @@
+import type { AppData, Prompt, Settings } from './types';
+export const DEFAULT_SETTINGS: Readonly<Settings>;
+export const DEFAULT_CATEGORY: string;
+export function categoryName(input: unknown): string;
+export function normalizeImport(input: unknown): AppData;
+export function migrateStoredData(input: unknown): AppData;
+export function applyMutation(current: AppData, action: import('./types').Mutation): AppData;
+export function filterPrompts(prompts: Prompt[], query?: string, view?: string, category?: string): Prompt[];
+export function getVariables(content: string): string[];
+export function renderTemplate(content: string, values: Record<string,string>): string;
+export function reorderPrompts(prompts: Prompt[], draggedId: string, targetId: string): string[];
+export function mergePrompts(existing: Prompt[], incoming: Prompt[]): Prompt[];
+export function seedData(): AppData;
