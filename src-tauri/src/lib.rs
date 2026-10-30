@@ -1,3 +1,5 @@
+#[cfg(windows)]
+mod clipboard;
 mod data;
 mod input;
 mod platform;

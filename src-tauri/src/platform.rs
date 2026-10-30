@@ -29,16 +29,14 @@ mod win {
         thread,
         time::{Duration, Instant},
     };
-    use windows::{
-        core::{IUnknown, Interface},
-        Win32::{
-            Foundation::HWND,
-            System::{
-                Com::{CoCreateInstance, CLSCTX_INPROC_SERVER},
-                Variant::VARIANT,
-            },
-            UI::Accessibility::*,
+    use windows::core::Interface;
+    use windows::Win32::{
+        Foundation::HWND,
+        System::{
+            Com::{CoCreateInstance, CLSCTX_INPROC_SERVER},
+            Variant::VARIANT,
         },
+        UI::Accessibility::*,
     };
 
     #[repr(C)]
@@ -90,7 +88,6 @@ mod win {
         fn ShowWindow(hwnd: isize, command: i32) -> i32;
         fn SendInput(count: u32, inputs: *const Input, size: i32) -> u32;
         fn GetAsyncKeyState(key: i32) -> i16;
-        fn GetClipboardSequenceNumber() -> u32;
     }
     #[link(name = "kernel32")]
     unsafe extern "system" {
@@ -108,9 +105,6 @@ mod win {
     unsafe extern "system" {
         fn OleInitialize(reserved: *mut c_void) -> i32;
         fn OleUninitialize();
-        fn OleGetClipboard(object: *mut *mut c_void) -> i32;
-        fn OleSetClipboard(object: *mut c_void) -> i32;
-        fn OleFlushClipboard() -> i32;
     }
     #[link(name = "oleaut32")]
     unsafe extern "system" {
@@ -410,54 +404,6 @@ mod win {
         }
         Ok(())
     }
-    struct ClipboardSnapshot {
-        previous: Option<IUnknown>,
-        sequence: u32,
-        armed: bool,
-    }
-    impl ClipboardSnapshot {
-        fn take() -> Result<Self, String> {
-            let mut pointer = std::ptr::null_mut();
-            let result = unsafe { OleGetClipboard(&mut pointer) };
-            if result < 0 {
-                return Err("剪贴板暂时不可用，请稍后重试。".into());
-            }
-            let previous = if pointer.is_null() {
-                None
-            } else {
-                Some(unsafe { IUnknown::from_raw(pointer) })
-            };
-            Ok(Self {
-                previous,
-                sequence: 0,
-                armed: false,
-            })
-        }
-        fn set(&mut self, text: &str) -> Result<(), String> {
-            let mut clipboard = arboard::Clipboard::new().map_err(|e| e.to_string())?;
-            clipboard
-                .set_text(text)
-                .map_err(|e| format!("无法写入剪贴板：{e}"))?;
-            self.sequence = unsafe { GetClipboardSequenceNumber() };
-            self.armed = true;
-            Ok(())
-        }
-    }
-    impl Drop for ClipboardSnapshot {
-        fn drop(&mut self) {
-            if self.armed && unsafe { GetClipboardSequenceNumber() } == self.sequence {
-                unsafe {
-                    let pointer = self
-                        .previous
-                        .as_ref()
-                        .map_or(std::ptr::null_mut(), Interface::as_raw);
-                    if OleSetClipboard(pointer) >= 0 {
-                        OleFlushClipboard();
-                    }
-                }
-            }
-        }
-    }
     fn verify_focus(
         client: &IUIAutomation,
         target: &Target,
@@ -508,43 +454,43 @@ mod win {
             (input, binding) = find_input(&client, target, None)?;
             focus_input(&client, target, &input)?;
         }
-        let mut clipboard = ClipboardSnapshot::take()?;
-        clipboard.set(text)?;
-        modifiers_released()?;
-        verify_focus(&client, target, &input)?;
-        keys(&[
-            key(0x11, false),
-            key(0x56, false),
-            key(0x56, true),
-            key(0x11, true),
-        ])?;
-        // Rich editors can expose the whole document or stale text through UIA.
-        // Allow paste handling to run without treating that text as a draft or a gate.
-        thread::sleep(Duration::from_millis(300));
-        if action == Action::Insert {
-            drop(clipboard);
-            return Ok(ExecutionResult {
-                message: "已填入目标输入框，尚未发送".into(),
-                binding,
-            });
-        }
-        modifiers_released()?;
-        verify_focus(&client, target, &input)?;
-        match send_key {
-            SendKey::Enter => keys(&[key(0x0D, false), key(0x0D, true)])?,
-            SendKey::CtrlEnter => keys(&[
+        let mut clipboard = crate::clipboard::ClipboardSnapshot::paste_text(text)?;
+        let result = (|| {
+            modifiers_released()?;
+            verify_focus(&client, target, &input)?;
+            keys(&[
                 key(0x11, false),
-                key(0x0D, false),
-                key(0x0D, true),
+                key(0x56, false),
+                key(0x56, true),
                 key(0x11, true),
-            ])?,
-        }
-        thread::sleep(Duration::from_millis(100));
-        drop(clipboard);
-        Ok(ExecutionResult {
-            message: "已填入并触发发送".into(),
-            binding,
-        })
+            ])?;
+            // Rich editors can expose the whole document or stale text through UIA.
+            // Allow paste handling to run without treating that text as a draft or a gate.
+            thread::sleep(Duration::from_millis(300));
+            if action == Action::Insert {
+                return Ok(ExecutionResult {
+                    message: "已填入目标输入框，尚未发送".into(),
+                    binding,
+                });
+            }
+            modifiers_released()?;
+            verify_focus(&client, target, &input)?;
+            match send_key {
+                SendKey::Enter => keys(&[key(0x0D, false), key(0x0D, true)])?,
+                SendKey::CtrlEnter => keys(&[
+                    key(0x11, false),
+                    key(0x0D, false),
+                    key(0x0D, true),
+                    key(0x11, true),
+                ])?,
+            }
+            thread::sleep(Duration::from_millis(100));
+            Ok(ExecutionResult {
+                message: "已填入并触发发送".into(),
+                binding,
+            })
+        })();
+        clipboard.finish(result)
     }
     #[cfg(test)]
     mod tests {

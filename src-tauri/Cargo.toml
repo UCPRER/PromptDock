@@ -1,6 +1,6 @@
 [package]
 name = "prompt-dock"
-version = "0.1.2"
+version = "0.1.5"
 description = "A local prompt library and quick-send panel for Windows"
 authors = ["PromptDock"]
 edition = "2021"
